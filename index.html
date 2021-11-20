@@ -9,8 +9,8 @@
 <h1>jQuery New Account Creation Form</h1>
 <form id="new-account-form">
 <p><input type="email" size="30" name="email" value="" placeholder="Enter your email address"></p>
-<p><input type="text" size="30" name="password1" value="" placeholder="Enter a password"></p>
-<p><input type="text" size="30" name="password2" value="" placeholder="Reenter the password"></p>
+<p><input type="password" size="30" name="password1" value="" placeholder="Enter a password"></p>
+<p><input type="password" size="30" name="password2" value="" placeholder="Reenter the password"></p>
 <button type="submit">Create Account</button>
 </form>
 <p>Form Output: <span id="output"></span></p>
@@ -32,22 +32,26 @@ $(document).ready(function() {
         let password2 = $("input[name='password2']").val().trim();
         let isValid = true;
         $(".error").remove();
+        $(".valid").remove();
     
         //Email Validation 
-        const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Z-z0-9.-]+\.[A-Za-z] {2,4} \b/;
+        //const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Z-z0-9.-]+\.[A-Za-z] {2,4} \b/;
 
         if(email == "")
             {
                 $("#output").append("<p class='error'><b>Email:</b> You must enter an email</p>");
                 isValid = false;
             }
- //The browser wouldn't let me enter an invalid email format so I figured I'd just comment this part out.                                                       
-       // if(!emailPattern.text(email))
-       //     {
-       //     $("#output").append("<p class='error'><b>Email:</b> Must be a valid email</p>");
-       //       isValid= false;
-       //     }
-        
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                if (emailPattern.test(email)) 
+                    {
+                        $("#output").append("<p class=\"valid\"><b>Email:</b> " + email + " </p>");
+                    }
+                    else
+                    {
+                        $("#output").append("<p class=\"error\"><b>Email:</b> You must enter a valid email</p>");
+                        isValid = false;
+                    }
         //Password Validation   
         if(password1.length < 6)
                 {
@@ -75,11 +79,13 @@ $(document).ready(function() {
                 }
                 else //Instead of letting the page reload I set the values varaibles to an empty string and appended success text to mimick the effect.
                 {
+                    $(".error").remove();
+                    $(".valid").remove();
                     event.preventDefault();
                     $("input[name='password1']").val("");
                     $("input[name='password2']").val("");
                     $("input[name='email']").val("");
-                    $("#output").append("<h1>Welcome Aboard</h1> <p>Your Account Has Been Created!</p> <p><b>Email Address: </b>" + email + "</p>" + "<p><b>Password: </b>" + password1 + "</p>");
+                    $("#output").append("<span class='valid'><h1>Welcome Aboard</h1> <p>Your Account Has Been Created!</p> <p><b>Email Address: </b>" + email + "</p>" + "<p><b>Password: </b>" + password1 + "</p></span>");
                 }
 
               
